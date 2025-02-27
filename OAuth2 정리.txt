@@ -1,0 +1,37 @@
+# OAuth ? 
+
+-> 웹 어플리케이션을 이용할 때 사용자가 해당 어플리케이션에 ID, PW 등의 정보를 제공하지 않고, 
+신뢰할 수 있는 외부 어플리케이션의 Open API에 ID, PW를 입력하여 해당 어플리케이션이 인증 과정을 처리해주는 방식 ! 
+
+================================================================= 
+
+# OAuth2 동작 절차
+
+1. 클라이언트가 소셜 로그인을 시도하면 서버 측 앤드포인트인 /oauth2/authorization/서비스명으로 요청을 보낸다.
+
+2. 해당 요청은 OAuth2AuthorizationRequestRedirectFilter에 오게 되고 등록된 외부 소셜 로그인 지원 서비스 중 인증 서버 주소(spring.security.oauth2.client.provider.naver.authorization-uri)와 302 응답을 리다이렉션으로 프론트에게 보낸다. 
+
+3. 프론트는 해당 인증 서버 주소로 요청을 보내고 로그인 페이지를 받아 클라이언트에게 응답한다. 
+
+4. 클라이언트는 응답받은 로그인 페이지에서 로그인을 진행하고 요청을 인증 서버에게 보낸 후 로그인이 성공하게 되면 인증 서버는 서버 중 엔드포인트인 /login/oauth2/code/서비스명으로 리다이렉션 시킨고 성공했음을 알리는 Code를 날려준다. 
+
+5. OAuth2LoginAuthenticationFilter에서 해당 인증 Code와 특정 정보를 OAtuh2LoginAuthenticationProvider 클래스에 넘겨주고 인증 서버에 Access 토큰을 요청하고 발급 받는다. 이후 인증 Code는 소멸된다.
+
+6. OAuth2LoginAuthenticationProvider는 해당 Access 토큰으로 유저 정보를 획득하기 위해 외부 소셜 로그인 지원 서비스 중 리소스 서버에 요청을 보낸다. 
+
+7. 리소스 서버는 요청으로 들어온 Access 토큰으로 검증을 수행한 후 OAuth2LoginAuthenticationProvider 클래스에 유저 정보를 반환한다. 
+
+8. 응답된 유저 정보는 OAuthUserDetails 객체로 표현되고, OAuth2UserDetailsService는 로그인 성공 후 처리되는 시큐리티 로직을 동작시키거나 세션 저장을 수행한다. 
+
+=================================================================
+
+# OAuth2 소셜 로그인(네이버) 변수 관련 흐름 
+
+1. 사용자가 "네이버 로그인 버튼"을 클릭하면 /oauth2/authorizatio/naver로 요청을 보낸다. 
+
+2. Spring Security가 내부적으로 spring.security.oauth2.client.provider.naver.authorization-uri에 설정된 URL로 HTTP 리다이렉션을 수행한다. 
+
+3. 네이버는 리다이렉션으로 온 발급 정보를 바탕으로 사용자를 네이버 로그인 페이지로 안내하고, 
+사용자가 로그인이 성공하면 설정된 spring.security.oauth2.client.registration.naver.redirect-uri로 인증 코드를 전달한다.
+
+================================================================= 
