@@ -6,7 +6,31 @@
 
 - SpringJWT-Basic : 단일 토큰(Header)으로 진행
 
-- SpringJWT-Advanced : Access(Header) /Refresh(Cookie) 토큰으로 진행 
+- SpringJWT-Advanced : Access(Header) / Refresh(Cookie) 토큰으로 진행
+
+- 의문점 :
+
+  Access Token은 왜 Header로 응답하는가 ?
+
+  = Access Token을 Cookie에 저장해서 응답하면, 클라이언트가 모든 요청에 자동으로 포함하기 때문에 CSRF 공격에 취약할 수 있다. 
+
+  = 따라서, Header로 응답을 하게 될 시 클라이언트가 자동으로 토큰을 포함하지 않아 CSRF 공격을 차단할 수 있다.
+
+  = 권한이 필요한 모든 경로에 사용되는 Access 토큰은 CSRF 공격의 위험보단 XSS 공격을 받는게 더 나은 선택일 수 있다 !
+
+  ( 추가적으로, XSS 보안 조치도 가능 )
+
+  Refresh Token은 왜 Cookie로 응답하는가 ?
+
+  = 쿠키는 XSS 공격을 받을 수 있지만, HttpOnly를 설정하면 JavaScript가 쿠키에 접근할 수 없어 완벽히 방어할 수 있다.
+
+  = 하지만, CSRF 공격을 방어하지 못하는데 Refresh Token의 사용처는 토큰 재발급 api에서만 사용하므로 크게 피해를 입힐 만한 로직이 없다.
+
+- XSS, CSRF 공격 정의
+
+  = XSS : 공격자가 웹 페이지에 악의적인 스크립트를 삽입하여 사용자의 정보를 탈튀하거나 조작하는 공격
+
+  = CSRF : 사용자가 자신의 의지와는 무관하게 공격자가 의도한 행위를 웹 어플리케이션에 요청하게 만드는 공격 
 
 ## OAuth2-Session : 2025/02/17 ~ 남은 과제 마감 후 업데이트
 
@@ -30,15 +54,19 @@
 
 - 추가 작업: Refresh 토큰은 데이터베이스(DB)에 저장해야 한다. 
 
-2. Access 토큰을 Header로 응답하는 API 구현 및 리다이렉션 설정
+2. Access 토큰을 Header로 응답하는 API 구현 및 리디렉션 설정
 
-- 1번 과정에서 Access 토큰을 쿠키로 응답한 후, 클라이언트가 Access 토큰을 Header로 받을 수 있도록 별도의 API를 호출할 수 있게 리다이렉션을 설정.
+- 1번 과정에서 Access 토큰을 쿠키로 응답한 후, 클라이언트가 Access 토큰을 Header로 받을 수 있도록 별도의 API를 호출할 수 있게 리디렉션을 설정.
 
 - 의문점 : 
   
-	왜 Access 토큰을 Header로 설정해서 응답해야 하는가 ?
+  1번 과정에서 Access 토큰을 Header로 보내면 되지 왜 추후에 api를 만들어서 Header로 보내는가 ?
 
-	1번 과정에서 Access 토큰을 Header로 보내면 되지 왜 추후에 api를 만들어서 Header로 보내는가 ? 
+  = OAuth2는 인증 코드를 리디렉션을 통해 전달하는 방식이기 때문에, 하이퍼링크 없이 소셜 로그인을 진행할 수 없다. 
+
+  = OAuth2 로그인 후 백엔드가 JWT를 발급해야 하지만, OAuth2의 리디렉션 방식에서는 프론트가 서버의 응답 헤더를 직접 읽을 수 없다.
+
+  = 따라서, JWT를 프론트에게 전달하기 위해서는 Cookie를 통해 응답해야 한다.
 
 3. 로그아웃 기능 구현 
 
