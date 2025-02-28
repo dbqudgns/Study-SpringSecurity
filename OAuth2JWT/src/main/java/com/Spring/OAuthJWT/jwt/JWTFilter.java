@@ -3,9 +3,10 @@ package com.Spring.OAuthJWT.jwt;
 import com.Spring.OAuthJWT.dto.CustomOAuth2User;
 import com.Spring.OAuthJWT.dto.UserDTO;
 import com.Spring.OAuthJWT.entity.Role;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -42,42 +43,38 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        //cookie들을 불러온 뒤 Authorization Key에 담긴 쿠키를 찾음
-        String authorization = null;
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("Authorization")) {
-                authorization = cookie.getValue();
-            }
-        }
 
-        //Authorization 헤더 검증
-        if (authorization == null) {
+        String access = null;
+        access = request.getHeader("Authorization");
 
-            log.info("token null");
+
+        if (access == null) {
             filterChain.doFilter(request, response);
-
-            //조건이 해당되면 메소드 종료(필수)
             return;
-
+        } else {
+            access = access.replace("Bearer ", "");
         }
 
-        //토큰
-        String token = authorization;
 
-        //토큰 소멸 시간 검증
-        if (jwtUtil.isExpired(token)) {
 
-            log.info("token expired");
-            filterChain.doFilter(request, response);
+        try {
+            jwtUtil.isExpired(access);
+        }
+        catch (ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
-            //조건이 해당되면 메소드 종료(필수)
+        String category = jwtUtil.getCategory(access);
+
+        if(!category.equals("access")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         //토큰에서 username과 role 획득
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
+        String username = jwtUtil.getUsername(access);
+        String role = jwtUtil.getRole(access);
         Role userRole = Role.valueOf(role.replace("ROLE_", ""));
 
         //UserDTO를 생성하여 값 set

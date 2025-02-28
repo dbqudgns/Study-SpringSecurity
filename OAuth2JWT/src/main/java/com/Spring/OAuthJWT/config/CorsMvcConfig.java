@@ -13,7 +13,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry corsRegistry) {
 
         corsRegistry.addMapping("/**") //모든 경로(/**)에 대해 CORS 설정을 적용
-                .exposedHeaders("Set-Cookie") //클라이언트가 응답 헤더 중 "Set-Cookie" 헤더를 읽을 수 있도록 허용
+               // .exposedHeaders("Authorization") //클라이언트가 응답 헤더 중 "Set-Cookie" 헤더를 읽을 수 있도록 허용
                 .allowedOrigins("http://localhost:3000"); //3000에서 오는 요청만 허용
 
     }
