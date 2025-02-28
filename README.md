@@ -24,7 +24,7 @@
 
   = 쿠키는 XSS 공격을 받을 수 있지만, HttpOnly를 설정하면 JavaScript가 쿠키에 접근할 수 없어 완벽히 방어할 수 있다.
 
-  = 하지만, CSRF 공격을 방어하지 못하는데 Refresh Token의 사용처는 토큰 재발급 api에서만 사용하므로 크게 피해를 입힐 만한 로직이 없다.
+  = 하지만, CSRF 공격을 방어하지 못하는데 Refresh Token의 사용처는 Token 재발급 api에서만 사용하므로 크게 피해를 입힐 만한 로직이 없다.
 
 - XSS, CSRF 공격 정의
 
@@ -46,7 +46,7 @@
 
 ### OAuth2-JWT 남은 과제  
 
-1. Access 토큰과 Refresh 토큰 응답 처리
+1. Access 토큰과 Refresh Token 응답 처리 => Pull requests : [ Refactor : OAuth2-JWT 남은 과제 1번, 2번 구현 ]
 
 - 현재 기본 코드에서는 Access 토큰만 쿠키로 응답하고 있다.
 
@@ -54,7 +54,7 @@
 
 - 추가 작업: Refresh 토큰은 데이터베이스(DB)에 저장해야 한다. 
 
-2. Access 토큰을 Header로 응답하는 API 구현 및 리디렉션 설정
+2. Access 토큰을 Header로 응답하는 API 구현 및 리디렉션 설정 => Pull requests : [ Refactor : OAuth2-JWT 남은 과제 1번, 2번 구현 ]
 
 - 1번 과정에서 Access 토큰을 쿠키로 응답한 후, 클라이언트가 Access 토큰을 Header로 받을 수 있도록 별도의 API를 호출할 수 있게 리디렉션을 설정.
 
@@ -68,6 +68,12 @@
 
   = 따라서, JWT를 프론트에게 전달하기 위해서는 Cookie를 통해 응답해야 한다.
 
-3. 로그아웃 기능 구현 
+3. Refresh Token Rotate 및 Access Token 재발급
 
-- 로그아웃 시 DB에 저장된 Refresh 토큰을 삭제하여 토큰 재발급을 방지 
+- Refresh Token을 인증하여 Access Token 재발급 구현
+
+- Refresh Token Rotate 구현 
+   
+4. 로그아웃 기능 구현 
+
+- 로그아웃 시 DB에 저장된 Refresh 토큰을 삭제하여 Token 재발급을 방지 
