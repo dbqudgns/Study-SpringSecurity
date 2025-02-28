@@ -44,8 +44,9 @@ public class JWTUtil {
     }
 
     //token(JWT) 생성 메서드
-    public String createJwt(String username, String role, Long expiredMs) {
+    public String createJwt(String category, String username, String role, Long expiredMs) {
         return Jwts.builder()
+                .claim("category", category)
                 .claim("username", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis())) //토큰이 발급된 시간 설정

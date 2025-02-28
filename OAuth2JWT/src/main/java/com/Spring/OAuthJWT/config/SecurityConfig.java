@@ -5,6 +5,7 @@ import com.Spring.OAuthJWT.jwt.JWTFilter;
 import com.Spring.OAuthJWT.jwt.JWTUtil;
 import com.Spring.OAuthJWT.oauth2.CustomClientRegistrationRepo;
 import com.Spring.OAuthJWT.service.CustomOAuth2UserService;
+import com.Spring.OAuthJWT.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ public class SecurityConfig {
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
     /** SecurityFilterChain :
      * HTTP 요청을 보호하기 위해 동작하는 보안 필터들의 체인(묶음)
@@ -87,8 +89,8 @@ public class SecurityConfig {
                         configuration.setMaxAge(3600L); //사전 요청 : 브라우저가 서버에게 api 요청을 보내도 되는지 먼저 확인하는 과정
                         //setMaxAge(3600L) : 1시간 동안 같은 요청의 사전 요청을 생략할 수 있다.
 
-                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie")); //클라이언트가 응답 헤더 중 "Set-Cookie" 헤더를 읽을 수 있도록 허용
-                        //configuration.setExposedHeaders(Collections.singletonList("Authorization")); //클라이언트가 응답 헤더 중 "Authorization" 헤더를 접근할 수 있도록 허용
+                        //configuration.setExposedHeaders(Collections.singletonList("Set-Cookie")); //클라이언트가 응답 헤더 중 "Set-Cookie" 헤더를 읽을 수 있도록 허용
+                        configuration.setExposedHeaders(Collections.singletonList("Authorization")); //클라이언트가 응답 헤더 중 "Authorization" 헤더를 접근할 수 있도록 허용
 
                         return configuration;
                     }
