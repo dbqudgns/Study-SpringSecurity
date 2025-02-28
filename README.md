@@ -42,7 +42,7 @@
 
 - 작업 : JdbcOAuth2AuthorizedClientService를 커스텀하여 진행 
 
-## OAuth2-JWT : 2025/02/24 ~ 남은 과제 마감 후 업데이트
+## OAuth2-JWT : 2025/02/24 ~ 2025/02/28
 
 ### OAuth2-JWT 남은 과제  
 
@@ -74,6 +74,6 @@
 
 - Refresh Token Rotate 구현 
    
-4. 로그아웃 기능 구현 
+4. 로그아웃 기능 구현 => Pull requests : [ Refactor : OAuth2-JWT 남은 과제 4번 구현 및 JWTFilter 수정 ]
 
 - 로그아웃 시 DB에 저장된 Refresh 토큰을 삭제하여 Token 재발급을 방지 
