@@ -8,9 +8,7 @@ import java.util.Map;
  */
 
 //Google 응답 구현체
-public class GoogleResponse implements OAuth2Response{
-
-    private final Map<String, Object> attribute;
+public record GoogleResponse(Map<String, Object> attribute) implements OAuth2Response{
 
     public GoogleResponse(Map<String, Object> attribute) {
         this.attribute = attribute;
