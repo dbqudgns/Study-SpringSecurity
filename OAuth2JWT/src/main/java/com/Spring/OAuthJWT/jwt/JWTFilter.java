@@ -2,6 +2,7 @@ package com.Spring.OAuthJWT.jwt;
 
 import com.Spring.OAuthJWT.dto.CustomOAuth2User;
 import com.Spring.OAuthJWT.dto.UserDTO;
+import com.Spring.OAuthJWT.entity.Role;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -77,11 +78,13 @@ public class JWTFilter extends OncePerRequestFilter {
         //토큰에서 username과 role 획득
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
+        Role userRole = Role.valueOf(role.replace("ROLE_", ""));
 
         //UserDTO를 생성하여 값 set
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(username);
-        userDTO.setRole(role);
+        UserDTO userDTO = UserDTO.builder()
+                .username(username)
+                .role(userRole)
+                .build();
 
         //UserDetails에 회원 정보 객체 담기
         CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO);

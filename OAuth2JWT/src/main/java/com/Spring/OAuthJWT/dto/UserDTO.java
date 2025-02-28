@@ -1,12 +1,14 @@
 package com.Spring.OAuthJWT.dto;
 
-import lombok.Data;
+import com.Spring.OAuthJWT.entity.Role;
+import lombok.Builder;
 
-@Data
-public class UserDTO {
+@Builder
+public record UserDTO(
 
-    private String role;
-    private String name;
-    private String username;
+        String username,
+        String name,
+        String email,
+        Role role
 
-}
+) {}

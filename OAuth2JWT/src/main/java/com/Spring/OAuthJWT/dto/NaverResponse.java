@@ -8,13 +8,10 @@ import java.util.Map;
  */
 
 //Naver 응답 구현체
-public class NaverResponse implements OAuth2Response{
-
-    private final Map<String, Object> attribute;
+public record NaverResponse(Map<String, Object> attribute) implements OAuth2Response {
 
     public NaverResponse(Map<String, Object> attribute) {
         this.attribute = (Map<String,Object>)attribute.get("response");
-
     }
 
     @Override
