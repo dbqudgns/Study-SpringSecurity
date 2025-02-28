@@ -4,6 +4,7 @@ import com.Spring.OAuthJWT.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 @Service
 public class OAuth2AccessHeaderService {
 
+    @Transactional
     public ResponseEntity<?> oauth2AccessHeader(HttpServletRequest request, HttpServletResponse response) {
 
         Cookie [] cookies = request.getCookies();

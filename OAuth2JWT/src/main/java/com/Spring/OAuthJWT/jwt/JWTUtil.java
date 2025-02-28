@@ -28,6 +28,11 @@ public class JWTUtil {
 
     }
 
+    //token(JWT)를 파싱하여 JWT 내부에 존재하는 category를 꺼내오는 메서드
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
     //token(JWT)를 파싱하여 JWT 내부에 존재하는 username을 꺼내오는 메서드
     public String getUsername(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);

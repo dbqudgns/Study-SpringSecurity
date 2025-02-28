@@ -69,7 +69,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/").permitAll() // /oauth2/authorization/서비스명, /login/oauth2/code/서비스명은 자동으로 인증없이 접근 가능하도록 설정되어 있다.
+                        .requestMatchers("/", "/change-to-header", "/reissue").permitAll() // /oauth2/authorization/서비스명, /login/oauth2/code/서비스명은 자동으로 인증없이 접근 가능하도록 설정되어 있다.
                         .anyRequest().authenticated());
 
         http
