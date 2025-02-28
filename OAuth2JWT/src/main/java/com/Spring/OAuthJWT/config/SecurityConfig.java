@@ -1,9 +1,12 @@
 package com.Spring.OAuthJWT.config;
 
+import com.Spring.OAuthJWT.entity.Role;
+import com.Spring.OAuthJWT.jwt.CustomLogoutFilter;
 import com.Spring.OAuthJWT.jwt.CustomSuccessHandler;
 import com.Spring.OAuthJWT.jwt.JWTFilter;
 import com.Spring.OAuthJWT.jwt.JWTUtil;
 import com.Spring.OAuthJWT.oauth2.CustomClientRegistrationRepo;
+import com.Spring.OAuthJWT.repository.RefreshRepository;
 import com.Spring.OAuthJWT.service.CustomOAuth2UserService;
 import com.Spring.OAuthJWT.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -29,7 +33,7 @@ public class SecurityConfig {
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
-    private final RefreshTokenService refreshTokenService;
+    private final RefreshRepository refreshRepository;
 
     /** SecurityFilterChain :
      * HTTP 요청을 보호하기 위해 동작하는 보안 필터들의 체인(묶음)
@@ -55,6 +59,10 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
+        //custom Logout filter 등록
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+
         //oauth2Login : OAuth2 로그인을 활성화하고, OAuth2와 관련된 필터와 세팅을 자동으로 설정해줌
         //oauth2Client : OAuth2 로그인을 활성화하고, OAuth2와 관련된 필터와 세팅을 직접 커스텀해야 됨
         /** .userInfoEndpoint( ~ ) : OAuth2 제공자로부터 사용자 정보를 가져올 때 사용할 서비스를 지정
@@ -70,6 +78,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/change-to-header", "/reissue").permitAll() // /oauth2/authorization/서비스명, /login/oauth2/code/서비스명은 자동으로 인증없이 접근 가능하도록 설정되어 있다.
+                        .requestMatchers("/my").hasRole(Role.USER.name())
                         .anyRequest().authenticated());
 
         http
