@@ -68,7 +68,7 @@
 
   = 따라서, JWT를 프론트에게 전달하기 위해서는 Cookie를 통해 응답해야 한다.
 
-3. Refresh Token Rotate 및 Access Token 재발급
+3. Refresh Token Rotate 및 Access Token 재발급 => Pull requests : [ Refactor : OAuth2-JWT 남은 과제 3번 구현 ]
 
 - Refresh Token을 인증하여 Access Token 재발급 구현
 
