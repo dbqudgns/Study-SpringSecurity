@@ -32,15 +32,18 @@
 
   = CSRF : 사용자가 자신의 의지와는 무관하게 공격자가 의도한 행위를 웹 어플리케이션에 요청하게 만드는 공격 
 
-## OAuth2-Session : 2025/02/17 ~ 남은 과제 마감 후 업데이트
-
+## OAuth2-Session : 2025/02/17 ~ 2925/03/07
 ### OAuth2-Session 남은 과제 : 
 
-1. 제공되는 서비스의 인증 서버에서 발급 받은 Access 토큰을 저장 및 관리해주는 JdbcOAuth2AuthorizedClientService의 문제점 해결
+1. 제공되는 서비스의 인증 서버에서 발급 받은 Access 토큰을 저장 및 관리해주는 JdbcOAuth2AuthorizedClientService의 문제점
 
 - oauth2_authorized_client 테이블 내 속성 중 cleint_registration_id, principal_name이 겹칠 경우 기존 데이터 위에 덮어쓰임
 
-- 작업 : JdbcOAuth2AuthorizedClientService를 커스텀하여 진행 
+- 특히, 해당 계정의 소유자 이름(principal_name 데이터 값)이 같을 경우 덮어씌는 문제 발생 
+
+- 작업 : JdbcOAuth2AuthorizedClientService를 커스텀하여 진행 => CustomCustomJdbcOAuth2AuthorizedClientService
+
+- 해결 방법 : oauth2_authorized_client 테이블 필드 중 principal_name 데이터 값을 해당 계정의 소유자 이름이 아닌 인증 서버에서 보내주는 사용자의 고유한 id 값인 providerId로 변경
 
 ## OAuth2-JWT : 2025/02/24 ~ 2025/02/28
 
