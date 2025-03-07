@@ -12,7 +12,8 @@ public class CustomOAuth2AuthorizedClientService {
 
     public OAuth2AuthorizedClientService oAuth2AuthorizedClientService(JdbcTemplate jdbcTemplate, ClientRegistrationRepository clientRegistrationRepository) {
 
-        return new JdbcOAuth2AuthorizedClientService(jdbcTemplate, clientRegistrationRepository); //jdbcTemplate을 통해 SQL문으로 DB의 토큰 정보를 CRUD 한다.
+     //   return new JdbcOAuth2AuthorizedClientService(jdbcTemplate, clientRegistrationRepository); //jdbcTemplate을 통해 SQL문으로 DB의 토큰 정보를 CRUD 한다.
+        return new CustomJdbcOAuth2AuthorizedClientService(jdbcTemplate, clientRegistrationRepository);
     }
 
 }
