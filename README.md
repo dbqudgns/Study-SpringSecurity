@@ -32,7 +32,7 @@
 
   = CSRF : 사용자가 자신의 의지와는 무관하게 공격자가 의도한 행위를 웹 어플리케이션에 요청하게 만드는 공격 
 
-## OAuth2-Session : 2025/02/17 ~ 2925/03/07
+## OAuth2-Session : 2025/02/17 ~ 2025/03/07
 ### OAuth2-Session 남은 과제 : 
 
 1. 제공되는 서비스의 인증 서버에서 발급 받은 Access 토큰을 저장 및 관리해주는 JdbcOAuth2AuthorizedClientService의 문제점
