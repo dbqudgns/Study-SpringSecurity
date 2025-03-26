@@ -1,6 +1,4 @@
-# Spring Security : Session, JWT, OAuth2(Session, JWT)
-
-## Session : 복습 후 업로드 예정 
+# Spring Security : JWT, OAuth2(Session, JWT)
 
 ## JWT : 2025/01/27 ~ 2025/02/05 
 
