@@ -36,6 +36,8 @@
 ### OAuth2-Session 남은 과제 : 
 
 1. 제공되는 서비스의 인증 서버에서 발급 받은 Access 토큰을 저장 및 관리해주는 JdbcOAuth2AuthorizedClientService의 문제점
+ 
+=> Pull requests : [ Refactor : OAuth2-Session 과제 1번 구현 ]
 
 - oauth2_authorized_client 테이블 내 속성 중 cleint_registration_id, principal_name이 겹칠 경우 기존 데이터 위에 덮어쓰임
 
